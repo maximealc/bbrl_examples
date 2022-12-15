@@ -21,6 +21,12 @@ def make_gym_env(env_name):
 
 def evaluate_agent(filename, env_name):
     eval_agent = torch.load(os.getcwd() + path + filename)
+    
+    #in some cases the Agent saved is already encapsulated in a TemporalAgent() which will lead to errors in the next steps, this workaround seems to solve the issue
+    if hasattr(eval_agent, "agent"):
+        eval_agent = eval_agent.agent[1]
+        
+ 
     eval_env_agent = NoAutoResetGymAgent(
         make_gym_env,
         {"env_name": env_name},
